@@ -35,6 +35,7 @@
                         <a class="nav-link" href="/trips/catalog">Shared Trips</a>
                     </li>
                     <!-- Logged users -->
+                    {{#if user}}
                     <li class="nav-item">
                         <a class="nav-link" href="/trips/create">Offer Trip</a>
                     </li>
@@ -42,15 +43,17 @@
                         <a class="nav-link" href="/trips/profile">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/auth/logout">Logout as [ test@abv.bg ]</a>
+                        <a class="nav-link" href="/auth/logout">Logout as [ {{user.email}} ]</a>
                     </li>
                     <!-- Guest users -->
+                    {{else}}
                     <li class="nav-item">
                         <a class="nav-link" href="/auth/login">Login</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/auth/register">Register</a>
                     </li>
+                    {{/if}}
                 </ul>
             </div>
         </div>
