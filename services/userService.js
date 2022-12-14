@@ -1,6 +1,6 @@
 const User = require('../models/User');
 
-async function createUser(email, username, hashedPassword) {
+async function createUser(email, gender, hashedPassword) {
     const user = new User({
         email,
         gender,

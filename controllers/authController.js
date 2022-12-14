@@ -26,7 +26,7 @@ body('email', 'Email is required!').isEmail().withMessage('Invalid email!').isLe
                 throw new Error(Object.values(errors).map(e=>e.msg).join('\n'))
             }
             console.log(errors);
-            await req.auth.register( req.body.email.trim(), req.body.username.trim(), req.body.password.trim());
+            await req.auth.register( req.body.email.trim(), req.body.gender, req.body.password.trim());
             console.log(req.auth);
             res.redirect('/');
         } catch (err) {
@@ -34,8 +34,8 @@ body('email', 'Email is required!').isEmail().withMessage('Invalid email!').isLe
             const ctx = {
                 errors: err.message.split('\n'),
                 userData: {
-                    username: req.body.username,
-                    // email: req.body.email
+                    // username: req.body.username,
+                   email: req.body.email
                 }
             }
 
