@@ -12,6 +12,7 @@ const schema = new Schema({
     price: { type: Number, min: [1, 'Price is positive number from 1 to 50!'], max: [50, 'Price is positive number from 1 to 50!']},
     description: { type: String, minLength: [10, 'Description cannot be less than 10 characters long!']},
     creator: { type: Schema.Types.ObjectId, ref: 'User' },
+    creatorEmail: {type: String},
     buddies: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
 
 })

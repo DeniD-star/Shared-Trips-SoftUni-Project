@@ -1,65 +1,74 @@
+<section class="py-5 details" id="trip-details-page">
+  <div class="container">
+    <div class="destination">
+      <div>
+        <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
+        <h5> from <span>{{trip.start}}</span> to <span>{{trip.end}}</span> </h5>
+      </div>
+      <div>
+        <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+        <h5> <span>{{trip.date}}</span> at <span>{{trip.time}}</span> </h5>
+      </div>
+    </div>
+    <p class="line"></p>
+    <div class="buddies-info">
+      <i class="fas fa-users buddies"></i>
+      <h5>Shared trip Buddies</h5>
+      <div>
+        {{#if trip.buddies}}
+          <!-- if there are joined buddies for the current trip separate them with comma and space", " -->
+          <p>{{trip.buddyEmails}}</p>
+        {{else}}
+          <!-- If not display: -->
+          <p>there are no buddies yet...</p>
+        {{/if}}
+      </div>
+      <h5>Driver: <span>{{trip.creatorEmail}}</span> </h5>
+    </div>
+    <p class="line"></p>
+    <h5 class="brand">Car Brand:
+      <span class="lead">{{trip.carBrand}}</span></h5>
+    <div class="trip-info">
+      <div>
+        <img class="img-fluid rounded" src={{trip.imageCar}} alt="car-image" />
+      </div>
+      <div class="trip-desc">
+        <h5>Information about the trip</h5>
+        <textarea class="lead" disabled>{{trip.description}}</textarea>
+        <h5>Price: <span class="lead">{{trip.price}}</span> BGN</h5>
 
-        <section class="py-5 details" id="trip-details-page">
-            <div class="container">
-                <div class="destination">
-                    <div>
-                        <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
-                        <h5> from <span>{{trip.start}}</span> to <span>{{trip.end}}</span> </h5>
-                    </div>
-                    <div>
-                        <span class="icon"><i class="fas fa-calendar-alt"></i></span>
-                        <h5> <span>{{trip.date}}</span> at <span>{{trip.time}}</span> </h5>
-                    </div>
-                </div>
-                <p class="line"></p>
-                <div class="buddies-info">
-                    <i class="fas fa-users buddies"></i>
-                    <h5>Shared trip Buddies</h5>
-                    <div>
-                        <!-- if there are joined buddies for the current trip separate them with comma and space", " -->
-                        <p>peter@abv.bg, marry@abv.bg</p>
+        <!-- if there are no logged in user do not show div with class actions  -->
+        {{#if user}}
+          <div class="actions">
+            <!-- Only for logged user and creator to this trip -->
+            {{#if trip.isCreator}}
+              <a href="/trips/delete/{{trip._id}}" class="btn btn-danger">Delete
+                this trip</a>
+              <a href="/trips/edit/{{trip._id}}" class="btn btn-warning">Edit
+                this trip</a>
+            {{else}}
+              {{#if trip.availableSeats}}
+                <!-- logged in user with available seats -->
+                {{#if trip.joined}}
+                  <!-- logged in user and has already joined the trip  -->
+                  <span class="btn btn-info">Already joined. Don't be late!</span>
+                {{else}}
+                  <a href="/trips/join/{{trip._id}}" class="btn btn-join">Join
+                    now, [
+                    {{trip.seats}}
+                    ] seats left!</a>
+                {{/if}}
 
-                        <!-- If not display: -->
-                        <p>there are no buddies yet...</p>
-                    </div>
-                    <h5>Driver: <span>mihail_valkov@mail.bg</span> </h5>
-                </div>
-                <p class="line"></p>
-                <h5 class="brand">Car Brand: <span class="lead">{{trip.carBrand}}</span></h5>
-                <div class="trip-info">
-                    <div>
-                        <img class="img-fluid rounded"
-                            src={{trip.imageCar}}
-                            alt="car-image">
-                    </div>
-                    <div class="trip-desc">
-                        <h5>Information about the trip</h5>
-                        <textarea class="lead"
-                            disabled>{{trip.description}}</textarea>
-                        <h5>Price: <span class="lead">{{trip.price}}</span> BGN</h5>
+              {{else}}
+                <!-- logged in user with no available seats -->
+                <span class="btn btn-secondary">No seats available! [{{trip.seats}}]</span>
 
-                        <!-- if there are no logged in user do not show div with class actions  -->
-                        {{#if user}}
-                        <div class="actions">
-                            <!-- Only for logged user and creator to this trip -->
-                            {{#if trip.isCreator}}
-                            <a href="/trips/delete/{{trip._id}}" class="btn btn-danger">Delete this trip</a>
-                            <a href="/trips/edit/{{trip._id}}" class="btn btn-warning">Edit this trip</a>
-                                {{else}}
-                            <!-- logged in user with available seats -->
-                            <a href="/trips/join/{{trip._id}}" class="btn btn-join">Join now, [ 1 ] seats left!</a>
+              {{/if}}
+            {{/if}}
+          </div>
+        {{/if}}
 
-                            <!-- logged in user and has already joined the trip  -->
-                            <span class="btn btn-info">Already joined. Don't be late!</span>
-
-                            <!-- logged in user with no available seats -->
-                            <span class="btn btn-secondary">No seats available! [{{seats}}]</span>
-                            {{/if}}
-                        </div>
-                        {{/if}}
-
-                    </div>
-                </div>
-            </div>
-        </section>
-   
+      </div>
+    </div>
+  </div>
+</section>

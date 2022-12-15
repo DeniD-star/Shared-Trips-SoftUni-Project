@@ -27,6 +27,7 @@ router.post('/create', isUser(), async (req, res) => {
             price: Number(req.body.price),
             description: req.body.description,
             creator: req.user._id,
+            creatorEmail: req.user.email,
             buddies: [],
         }
         await req.storage.offerTrip(tripData)
@@ -65,7 +66,12 @@ router.get('/details/:id', async(req, res)=>{
 
         const trip = await req.storage.getTripById(req.params.id);
         trip.hasUser = Boolean(req.user);
-        trip.isCreator = req.user && req.user._id == trip.creator
+        trip.isCreator = req.user && req.user._id == trip.creator;
+        trip.joined = req.user && trip.buddies.find(x=> x._id == req.user._id)
+        trip.availableSeats = trip.seats && trip.seats > 0; 
+        trip.emails = trip.buddies.map(x=> x.email);
+        trip.buddyEmails= trip.emails.join(', ')
+       
 
         res.render('trip-details', {trip})
     } catch (err) {
@@ -128,7 +134,7 @@ router.get('/delete/:id', isUser(), async(req, res)=>{
 
             if(trip.creator != req.user._id){
               
-                throw new Error('You cannot edit a trip you have not created!')
+                throw new Error('You cannot delete a trip you have not created!')
             }
 
             await req.storage.deleteTrip(req.params.id);
@@ -139,4 +145,19 @@ router.get('/delete/:id', isUser(), async(req, res)=>{
         }
 })
 
+
+router.get('/join/:id', isUser(), async(req, res)=>{
+    try {
+        const trip = await req.storage.getTripById(req.params.id);
+        if(trip.creator == req.user._id){
+            throw new Error('You cannot join a trip you have created!')
+        }
+
+        await req.storage.joinTrip(req.params.id, req.user._id);
+        res.redirect('/trips/details/' + req.params.id)
+    } catch (err) {
+        console.log(err.message);
+        res.redirect('/trips/404')
+    }
+})
 module.exports = router;
