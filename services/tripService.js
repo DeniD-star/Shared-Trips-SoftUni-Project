@@ -28,9 +28,14 @@ async function editTrip(id, newTrip){
     await trip.save()
     return trip;
 }
+
+async function deleteTrip(id){
+    return Trip.findByIdAndDelete(id);
+}
 module.exports = {
     getAllTrips,
     offerTrip,
     getTripById,
-    editTrip
+    editTrip,
+    deleteTrip
 }

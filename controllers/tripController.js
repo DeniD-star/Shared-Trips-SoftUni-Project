@@ -119,4 +119,24 @@ router.post('/edit/:id', isUser(), async(req, res)=>{
         res.render('trip-edit', ctx)
     }
 })
+
+
+router.get('/delete/:id', isUser(), async(req, res)=>{
+        try {
+            const trip = await req.storage.getTripById(req.params.id);
+
+
+            if(trip.creator != req.user._id){
+              
+                throw new Error('You cannot edit a trip you have not created!')
+            }
+
+            await req.storage.deleteTrip(req.params.id);
+            res.redirect('/trips/catalog')
+        } catch (err) {
+            console.log(err.message);
+            res.redirect('/trips/404')
+        }
+})
+
 module.exports = router;
