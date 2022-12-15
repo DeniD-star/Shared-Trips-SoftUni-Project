@@ -21,11 +21,12 @@ async function editTrip(id, newTrip){
     trip.time = newTrip.time.trim()
     trip.imageCar = newTrip.imageCar.trim()
     trip.carBrand = newTrip.carBrand.trim()
-    trip.seats = Number(newTrip.seats).trim()
-    trip.price = Number(newTrip.price).trim()
+    trip.seats = Number(newTrip.seats)
+    trip.price = Number(newTrip.price)
     trip.description = newTrip.description.trim()
 
-    return trip.save()
+    await trip.save()
+    return trip;
 }
 module.exports = {
     getAllTrips,

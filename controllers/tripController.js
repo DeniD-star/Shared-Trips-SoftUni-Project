@@ -1,5 +1,5 @@
 const { isUser } = require('../middlewares/guards');
-const parseError = require('../util/parse')
+const {parseError }= require('../util/parse')
 const router = require('express').Router();
 
 
@@ -78,25 +78,20 @@ router.get('/404', (req, res)=>{
     res.render('404')
 })
 router.get('/edit/:id', isUser(), async(req, res)=>{
-    try {
+  
       const trip = await req.storage.getTripById(req.params.id);
 
-      if(trip.creator !== req.user._id){
-          throw new Error('You cannot edit a trip you have not created!')
-      }
-
+     
       res.render('trip-edit', {trip})
-    } catch (err) {
-        console.log(err.message);
-        res.redirect('/trips/catalog')
-    }
+   
 })
 router.post('/edit/:id', isUser(), async(req, res)=>{
     try {
       const trip = await req.storage.getTripById(req.params.id);
 
-      if(trip.creator !== req.user._id){
-          
+
+      if(trip.creator != req.user._id){
+        
           throw new Error('You cannot edit a trip you have not created!')
       }
 
