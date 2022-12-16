@@ -1,6 +1,7 @@
 const { isUser } = require('../middlewares/guards');
 const {parseError }= require('../util/parse')
 const router = require('express').Router();
+const userService = require('../services/userService')
 
 
 router.get('/', (req, res) => {
@@ -30,7 +31,7 @@ router.post('/create', isUser(), async (req, res) => {
             creatorEmail: req.user.email,
             buddies: [],
         }
-        await req.storage.offerTrip(tripData)
+        await req.storage.offerTrip(tripData, req.user._id)
         res.redirect('/trips/catalog')
     } catch (err) {
         console.log(err.message);
@@ -160,4 +161,41 @@ router.get('/join/:id', isUser(), async(req, res)=>{
         res.redirect('/trips/404')
     }
 })
+
+
+// router.get('/profile', isUser(), async(req, res) =>{
+//     try {
+
+        
+       
+//             const user = await userService.getUserByEmail(req.user.email)
+//             user.userEmail = user.email;
+//             user.length = user.historyTrips.length;
+//             user.history = user.historyTrips.map((x)=> req.storage.getTripById(x));
+//             console.log(user.history  + '      history');
+
+//             console.log(user + '        user');
+//         // if(user != req.user._id){
+//         //     throw new Error('You cannot have access to another profile!')
+//         // }
+    
+//         await req.storage.getUserTrips(req.user._id)
+//         res.render('profile', {user})
+        
+       
+        
+//     } catch (err) {
+//         console.log(err.message);
+//         res.redirect('/trips/404')
+//     }
+// })
+
+
+router.get('/profile', async(req, res)=>{
+    const user = await req.storage.getUsersAllTrips(req.user._id);
+   //console.log(req.user.gender , 'tripController')
+
+    res.render('profile', {user});
+});
+
 module.exports = router;

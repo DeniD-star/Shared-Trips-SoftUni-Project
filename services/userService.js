@@ -5,7 +5,7 @@ async function createUser(email, gender, hashedPassword) {
         email,
         gender,
         hashedPassword,
-        tripsHistory: []
+        historyTrips: []
     })
 
     await user.save();

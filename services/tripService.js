@@ -1,3 +1,4 @@
+const router = require('../controllers/homeController');
 const Trip = require('../models/Trip');
 const User = require('../models/User');
 
@@ -5,12 +6,14 @@ const User = require('../models/User');
 async function getAllTrips(){
     return Trip.find({}).lean();
 }
-async function offerTrip(tripData){
-    const trip = await new Trip(tripData);
-    trip.save();
-    return trip;
-}
+async function offerTrip(tripData, userId){
+    const trip =  await new Trip(tripData);
+    const user = await User.findById(userId)//here we dont need .lean()
+    user.historyTrips.push(trip);
+    console.log(user.historyTrips);
 
+    return Promise.all([trip.save(), user.save()])
+}
 async function getTripById(id){
     return Trip.findById(id).populate('buddies').lean();
 }
@@ -47,11 +50,26 @@ async function joinTrip(tripId, userId){
        return Promise.all([trip.save(), user.save()])
 
 }
+
+// async function getUserTrips(userId){
+//     const user = await User.findById(userId).populate('historyTrips');
+    
+     
+//      return user.save();
+
+// }
+
+async function getUsersAllTrips(userId) {
+    const user = await User.findById(userId).populate('historyTrips').lean();
+    
+    return user;
+}
 module.exports = {
     getAllTrips,
     offerTrip,
     getTripById,
     editTrip,
     deleteTrip,
-    joinTrip
+    joinTrip,
+    getUsersAllTrips
 }
